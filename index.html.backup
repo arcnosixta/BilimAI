@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BilimAI - ҰБТ платформасы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; }
+        .nav-active { color: #f59e0b !important; }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-white min-h-screen">
+
+    <!-- ====================== AUTH PAGE ====================== -->
+    <div id="auth-page" class="min-h-screen flex items-center justify-center p-6">
+        <div class="max-w-md w-full">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-3 mb-3">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-amber-400 rounded-2xl flex items-center justify-center text-4xl shadow-lg">📘</div>
+                    <h1 class="text-4xl font-bold">BilimAI</h1>
+                </div>
+                <p class="text-slate-400">Оқу платформасы</p>
+            </div>
+
+            <div class="bg-[#1e2937] rounded-3xl p-8">
+                <h2 class="text-2xl font-semibold text-center mb-8">Қош келдіңіз!</h2>
+
+                <!-- Тіркелу -->
+                <div class="mb-10">
+                    <h3 class="text-slate-400 mb-4 text-sm">Тіркелу</h3>
+                    <div class="space-y-4">
+                        <input id="register-email" type="email" placeholder="Email" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <input id="register-password" type="password" placeholder="Құпия сөз" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <button id="register-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 rounded-2xl">
+                            Тіркелу
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative my-6">
+                    <div class="border-t border-slate-600"></div>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1e2937] px-4 text-xs text-slate-500">немесе</div>
+                </div>
+
+                <!-- Кіру -->
+                <div>
+                    <h3 class="text-slate-400 mb-4 text-sm">Кіру</h3>
+                    <div class="space-y-4">
+                        <input id="login-email" type="email" placeholder="Email" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <input id="login-password" type="password" placeholder="Құпия сөз" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <button id="login-btn" class="w-full bg-white hover:bg-slate-100 text-black font-bold py-4 rounded-2xl">
+                            Кіру
+                        </button>
+                    </div>
+                </div>
+
+                <p id="auth-error" class="text-red-400 text-center mt-6 text-sm"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================== MAIN APP (Dashboard + Profile) ====================== -->
+    <div id="main-app" class="hidden">
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="min-h-screen pb-20">
+            <div class="max-w-2xl mx-auto p-6">
+                <h1 class="text-3xl font-bold mb-2">Сәлем, Оқушы! 👋</h1>
+                <p id="user-email-dash" class="text-slate-400 mb-8"></p>
+                
+                <div class="bg-[#1e2937] rounded-3xl p-8 text-center">
+                    <p class="text-slate-300">Басты бет әзірге қарапайым</p>
+                    <p class="text-sm text-slate-500 mt-4">Кейін толық дашборд қосамыз</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="hidden min-h-screen pb-20">
+            <div class="max-w-2xl mx-auto p-6">
+                <!-- Profile Header -->
+                <div class="text-center mb-10">
+                    <div class="w-28 h-28 mx-auto bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-6xl shadow-lg mb-4">
+                        👤
+                    </div>
+                    <h2 id="profile-name" class="text-2xl font-bold">Оқушы</h2>
+                    <p id="profile-email" class="text-slate-400"></p>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    <div class="bg-[#1e2937] rounded-3xl p-5 text-center">
+                        <div class="text-3xl font-bold text-orange-400">12</div>
+                        <div class="text-xs text-slate-400 mt-1">Сабақ оқылды</div>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-3xl p-5 text-center">
+                        <div class="text-3xl font-bold text-cyan-400">245</div>
+                        <div class="text-xs text-slate-400 mt-1">Ұпай</div>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-3xl p-5 text-center">
+                        <div class="text-3xl font-bold text-emerald-400">7</div>
+                        <div class="text-xs text-slate-400 mt-1">Күн стрик</div>
+                    </div>
+                </div>
+
+                <!-- Menu Items -->
+                <div class="space-y-3">
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-user-edit text-xl text-orange-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Жеке ақпаратты өзгерту</div>
+                            <div class="text-sm text-slate-400">Аты-жөні, телефон</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-trophy text-xl text-amber-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Менің жетістіктерім</div>
+                            <div class="text-sm text-slate-400">Бейджіктер мен сертификаттар</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-cog text-xl text-slate-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Параметрлер</div>
+                            <div class="text-sm text-slate-400">Хабарландырулар, тіл</div>
+                        </div>
+                    </div>
+
+                    <button onclick="logoutUser()" 
+                            class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-medium mt-8">
+                        Аккаунттан шығу
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-[#1e2937] border-t border-slate-700 py-2">
+            <div class="max-w-2xl mx-auto grid grid-cols-5 text-center">
+                <a onclick="showPage('dashboard')" class="flex flex-col items-center text-slate-400 hover:text-white">
+                    <i class="fas fa-home text-2xl"></i>
+                    <span class="text-xs mt-1">Басты</span>
+                </a>
+                <a onclick="showPage('dashboard')" class="flex flex-col items-center text-slate-400 hover:text-white">
+                    <i class="fas fa-book text-2xl"></i>
+                    <span class="text-xs mt-1">Практика</span>
+                </a>
+                <a onclick="showPage('dashboard')" class="flex flex-col items-center text-slate-400 hover:text-white">
+                    <i class="fas fa-tasks text-2xl"></i>
+                    <span class="text-xs mt-1">Тест</span>
+                </a>
+                <a onclick="showPage('dashboard')" class="flex flex-col items-center text-slate-400 hover:text-white">
+                    <i class="fas fa-users text-2xl"></i>
+                    <span class="text-xs mt-1">Куратор</span>
+                </a>
+                <a onclick="showPage('profile')" id="nav-profile" class="flex flex-col items-center text-orange-400 nav-active">
+                    <i class="fas fa-user text-2xl"></i>
+                    <span class="text-xs mt-1">Профиль</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAldxIiXS-M9OWwbUpCVfNjS1tcCgFK-lU",
+            authDomain: "bilimai-317e8.firebaseapp.com",
+            projectId: "bilimai-317e8",
+            storageBucket: "bilimai-317e8.firebasestorage.app",
+            messagingSenderId: "809788611994",
+            appId: "1:809788611994:web:2bbd71059bd23f382e6e23",
+            measurementId: "G-CW6GFVRKV0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const authPage = document.getElementById('auth-page');
+        const mainApp = document.getElementById('main-app');
+        const dashboardPage = document.getElementById('dashboard-page');
+        const profilePage = document.getElementById('profile-page');
+
+        const userEmailDash = document.getElementById('user-email-dash');
+        const profileEmail = document.getElementById('profile-email');
+        const profileName = document.getElementById('profile-name');
+
+        const authError = document.getElementById('auth-error');
+
+        // Auth формалары
+        document.getElementById('register-btn').addEventListener('click', async () => {
+            const email = document.getElementById('register-email').value.trim();
+            const pass = document.getElementById('register-password').value.trim();
+            authError.textContent = '';
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            } catch (e) { authError.textContent = e.message; }
+        });
+
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+            authError.textContent = '';
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) { authError.textContent = e.message; }
+        });
+
+        // Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authPage.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                userEmailDash.textContent = user.email;
+                profileEmail.textContent = user.email;
+                profileName.textContent = user.email.split('@')[0]; // қарапайым атау
+                showPage('dashboard'); // әдепкі бет
+            } else {
+                authPage.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+            }
+        });
+
+        // Беттерді ауыстыру функциясы
+        window.showPage = function(page) {
+            dashboardPage.classList.add('hidden');
+            profilePage.classList.add('hidden');
+
+            if (page === 'dashboard') {
+                dashboardPage.classList.remove('hidden');
+            } else if (page === 'profile') {
+                profilePage.classList.remove('hidden');
+            }
+
+            // Навигациядағы белсенді түсті өзгерту
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('nav-active'));
+            if (page === 'profile') document.getElementById('nav-profile').classList.add('nav-active');
+        };
+
+        // Шығу
+        window.logoutUser = async () => {
+            await signOut(auth);
+        };
+    </script>
+</body>
+</html>

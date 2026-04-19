@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BilimAI - ҰБТ платформасы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; }
+        .nav-active { color: #f59e0b !important; }
+        .circular-progress { transform: rotate(-90deg); }
+        .podio-1 { transform: translateY(-20px); }
+        .gradient-orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-white min-h-screen">
+
+    <!-- ====================== AUTH PAGE ====================== -->
+    <div id="auth-page" class="min-h-screen flex items-center justify-center p-6">
+        <div class="max-w-md w-full">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-3 mb-3">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-amber-400 rounded-2xl flex items-center justify-center text-4xl shadow-lg">📘</div>
+                    <h1 class="text-4xl font-bold">BilimAI</h1>
+                </div>
+                <p class="text-slate-400">ҰБТға дайындық платформасы</p>
+            </div>
+
+            <div class="bg-[#1e2937] rounded-3xl p-8">
+                <h2 class="text-2xl font-semibold text-center mb-8">Қош келдіңіз!</h2>
+
+                <!-- Тіркелу -->
+                <div class="mb-10">
+                    <h3 class="text-slate-400 mb-4 text-sm">Тіркелу</h3>
+                    <div class="space-y-4">
+                        <input id="register-email" type="email" placeholder="Email" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <input id="register-password" type="password" placeholder="Құпия сөз" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <button id="register-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 rounded-2xl">
+                            Тіркелу
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative my-6">
+                    <div class="border-t border-slate-600"></div>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1e2937] px-4 text-xs text-slate-500">немесе</div>
+                </div>
+
+                <!-- Кіру -->
+                <div>
+                    <h3 class="text-slate-400 mb-4 text-sm">Кіру</h3>
+                    <div class="space-y-4">
+                        <input id="login-email" type="email" placeholder="Email" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <input id="login-password" type="password" placeholder="Құпия сөз" 
+                               class="w-full bg-[#334155] border border-slate-600 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-400">
+                        <button id="login-btn" class="w-full bg-white hover:bg-slate-100 text-black font-bold py-4 rounded-2xl">
+                            Кіру
+                        </button>
+                    </div>
+                </div>
+
+                <p id="auth-error" class="text-red-400 text-center mt-6 text-sm"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================== MAIN APP ====================== -->
+    <div id="main-app" class="hidden">
+
+        <!-- ====================== 1. DASHBOARD PAGE ====================== -->
+        <div id="dashboard-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold">Сәлем, <span id="user-name">Оқушы</span>! 👋</h1>
+                        <p id="user-email-dash" class="text-slate-400 text-sm"></p>
+                    </div>
+                    <div class="relative">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-xl shadow-lg">
+                            👤
+                        </div>
+                        <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar - Days Left -->
+                <div class="bg-[#1e2937] rounded-2xl p-5 mb-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-slate-300">ҰБТ-ға дейін</span>
+                        <span class="text-orange-400 font-bold">21 күн қалды</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-3">
+                        <div class="bg-gradient-to-r from-orange-400 to-amber-400 h-3 rounded-full" style="width: 75%"></div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    <!-- Circular Progress -->
+                    <div class="bg-[#1e2937] rounded-2xl p-4 text-center">
+                        <div class="relative w-24 h-24 mx-auto mb-3">
+                            <svg class="circular-progress w-24 h-24" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="8"/>
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#f59e0b" stroke-width="8" 
+                                        stroke-dasharray="283" stroke-dashoffset="283" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-xl font-bold">0</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400">Алынған ұпай</p>
+                        <p class="text-xs text-slate-500">0/140</p>
+                    </div>
+                    <!-- Grant Chance -->
+                    <div class="bg-[#1e2937] rounded-2xl p-4 text-center">
+                        <div class="w-16 h-16 mx-auto mb-3 bg-slate-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-2xl text-emerald-400"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-emerald-400">0%</p>
+                        <p class="text-sm text-slate-400">Грант мүмкіндігі</p>
+                    </div>
+                </div>
+
+                <!-- Study Timer -->
+                <div class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl p-4 mb-5 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-clock text-orange-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400">Бүгінгі оқу</p>
+                            <p class="text-xl font-bold">6 мин</p>
+                        </div>
+                    </div>
+                    <button class="bg-orange-500 hover:bg-orange-600 text-black px-4 py-2 rounded-xl text-sm font-medium">
+                        Жалғастыру
+                    </button>
+                </div>
+
+                <!-- Motivational Quote -->
+                <div class="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-2xl p-5 mb-5 border border-indigo-500/30">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-quote-left text-indigo-400 text-xl"></i>
+                        <div>
+                            <p class="text-slate-300 italic">"Білім - ең жақсы инвестиция. Ол ешкімнен ұрланбайды және уақыт өте келе өсіп, құнын арттырады."</p>
+                            <p class="text-sm text-slate-500 mt-2">— Абай Құнанбаев</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Plan Checklist -->
+                <div class="bg-[#1e2937] rounded-2xl p-5 mb-5">
+                    <h3 class="font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-calendar-check text-orange-400"></i>
+                        Бүгінгі жоспар
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-orange-500 focus:ring-orange-500">
+                            <span class="text-slate-300 group-hover:text-white transition-colors">Математикадан 10 есеп шешу</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-orange-500 focus:ring-orange-500" checked>
+                            <span class="text-slate-500 line-through group-hover:text-slate-400 transition-colors">Қазақ тілінен 5 тест</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-orange-500 focus:ring-orange-500">
+                            <span class="text-slate-300 group-hover:text-white transition-colors">Қазақстан тарихынан оқу</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-orange-500 focus:ring-orange-500">
+                            <span class="text-slate-300 group-hover:text-white transition-colors">Ағылшын тілінен 10 тест</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    <button onclick="showPage('career')" class="gradient-orange p-4 rounded-2xl text-center font-semibold hover:opacity-90 transition-opacity">
+                        <i class="fas fa-compass text-xl mb-2 block"></i>
+                        Кәсіби бағдар
+                    </button>
+                    <button onclick="showPage('leaderboard')" class="gradient-blue p-4 rounded-2xl text-center font-semibold hover:opacity-90 transition-opacity">
+                        <i class="fas fa-trophy text-xl mb-2 block"></i>
+                        Рейтинг
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 2. LEADERBOARD PAGE ====================== -->
+        <div id="leaderboard-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <!-- Header -->
+                <div class="flex items-center gap-4 mb-6">
+                    <button onclick="showPage('dashboard')" class="w-10 h-10 bg-[#1e2937] rounded-xl flex items-center justify-center hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">Рейтинг</h1>
+                </div>
+                <p class="text-slate-400 mb-6">Аптаның үздік 10 оқушысы</p>
+
+                <!-- Podium Top 3 -->
+                <div class="flex items-end justify-center gap-4 mb-8">
+                    <!-- 2nd Place -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-slate-600 border-4 border-slate-400 flex items-center justify-center text-2xl mb-2">
+                            🥈
+                        </div>
+                        <div class="bg-[#1e2937] rounded-t-xl px-4 py-3 text-center w-28">
+                            <p class="font-semibold text-sm truncate">Айдос</p>
+                            <p class="text-slate-400 font-bold">128</p>
+                        </div>
+                    </div>
+                    <!-- 1st Place -->
+                    <div class="flex flex-col items-center podio-1">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 border-4 border-yellow-300 flex items-center justify-center text-3xl mb-2 shadow-lg shadow-yellow-500/30">
+                            🥇
+                        </div>
+                        <div class="bg-gradient-to-b from-amber-900/50 to-[#1e2937] rounded-t-xl px-5 py-4 text-center w-32">
+                            <p class="font-bold truncate">Айнұр</p>
+                            <p class="text-amber-400 font-bold text-lg">135</p>
+                        </div>
+                    </div>
+                    <!-- 3rd Place -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-amber-800 border-4 border-amber-600 flex items-center justify-center text-2xl mb-2">
+                            🥉
+                        </div>
+                        <div class="bg-[#1e2937] rounded-t-xl px-4 py-3 text-center w-28">
+                            <p class="font-semibold text-sm truncate">Бағдат</p>
+                            <p class="text-slate-400 font-bold">124</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List 4-10 -->
+                <div class="bg-[#1e2937] rounded-2xl p-4 space-y-3">
+                    <!-- Row Template -->
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">4</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Дана</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-atom text-cyan-400"></i> Физика</p>
+                        </div>
+                        <span class="text-cyan-400 font-bold">118</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">5</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Ерасыл</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-flask text-emerald-400"></i> Химия</p>
+                        </div>
+                        <span class="text-emerald-400 font-bold">115</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">6</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Жансая</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-square-root-alt text-purple-400"></i> Математика</p>
+                        </div>
+                        <span class="text-purple-400 font-bold">112</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">7</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Ибрагим</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-dna text-rose-400"></i> Биология</p>
+                        </div>
+                        <span class="text-rose-400 font-bold">109</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">8</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Қарагөз</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-landmark text-amber-400"></i> Тарих</p>
+                        </div>
+                        <span class="text-amber-400 font-bold">106</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">9</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Мадина</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-globe text-blue-400"></i> География</p>
+                        </div>
+                        <span class="text-blue-400 font-bold">103</span>
+                    </div>
+                    <div class="border-t border-slate-700"></div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <span class="w-8 text-center text-slate-500 font-medium">10</span>
+                        <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center">👤</div>
+                        <div class="flex-1">
+                            <p class="font-medium">Нұрсұлтан</p>
+                            <p class="text-xs text-slate-500">11-класс • <i class="fas fa-language text-indigo-400"></i> Ағылшын</p>
+                        </div>
+                        <span class="text-indigo-400 font-bold">100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 3. CAREER PAGE (Кәсіби бағдар) ====================== -->
+        <div id="career-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <!-- Header -->
+                <div class="flex items-center gap-4 mb-6">
+                    <button onclick="showPage('dashboard')" class="w-10 h-10 bg-[#1e2937] rounded-xl flex items-center justify-center hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">Кәсіби бағдар</h1>
+                </div>
+
+                <!-- Schedule Section -->
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-orange-400"></i>
+                    ҰБТ 2026 кестесі
+                </h2>
+                <div class="space-y-3 mb-6">
+                    <div class="bg-[#1e2937] rounded-2xl p-4 border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Негізгі ҰБТ</h3>
+                            <span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm">16-30 маусым</span>
+                        </div>
+                        <p class="text-sm text-slate-400">Мемлекеттік грантқа өтпеу үшін негізгі керек</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-2xl p-4 border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Қосымша ҰБТ</h3>
+                            <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">23-29 тамыз</span>
+                        </div>
+                        <p class="text-sm text-slate-400">Арнайы байқау түсу үшін</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-2xl p-4 border-l-4 border-emerald-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold">Қысқы ҰБТ</h3>
+                            <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm">15-25 қаңтар</span>
+                        </div>
+                        <p class="text-sm text-slate-400">ЖОО-ға қысқы қабылдау</p>
+                    </div>
+                </div>
+
+                <!-- Test Format -->
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-blue-400"></i>
+                    ҰБТ тест форматы
+                </h2>
+                <div class="bg-[#1e2937] rounded-2xl p-5 mb-6">
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-orange-400">120</p>
+                            <p class="text-xs text-slate-400">сұрақ</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-emerald-400">140</p>
+                            <p class="text-xs text-slate-400">балл</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-blue-400">3с 50м</p>
+                            <p class="text-xs text-slate-400">уақыт</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Subject Table -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                            <span class="text-slate-300">Математикалық сауаттылық</span>
+                            <span class="font-bold">20 сұрақ • 10 балл</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                            <span class="text-slate-300">Оқу сауаттылығы</span>
+                            <span class="font-bold">20 сұрақ • 10 балл</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                            <span class="text-slate-300">Қазақстан тарихы</span>
+                            <span class="font-bold">40 сұрақ • 20 балл</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-slate-300">1 және 2 пәндер (таңдау)</span>
+                            <span class="font-bold">40 сұрақ • 100 балл</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subject Combinations -->
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <i class="fas fa-layer-group text-purple-400"></i>
+                    Бейіндік пән комбинациялары
+                </h2>
+                <div class="space-y-3" id="subject-combinations">
+                    <!-- Combination 4.11 -->
+                    <div class="bg-[#1e2937] rounded-2xl overflow-hidden">
+                        <button onclick="toggleCombo('combo-411')" class="w-full p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-lg font-mono text-sm">4.11</span>
+                                <span class="font-medium">Математика — Физика</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform" id="icon-411"></i>
+                        </button>
+                        <div id="combo-411" class="hidden px-4 pb-4">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B009</span>
+                                    <span class="text-slate-300">Математика</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B010</span>
+                                    <span class="text-slate-300">Механика</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B011</span>
+                                    <span class="text-slate-300">Информатика</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B012</span>
+                                    <span class="text-slate-300">Аэроғарыштық техника</span>
+                                </div>
+                                <button class="w-full mt-3 bg-slate-700 hover:bg-slate-600 py-2 rounded-xl text-sm">
+                                    +12 мамандық көру
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Combination 4.41 -->
+                    <div class="bg-[#1e2937] rounded-2xl overflow-hidden">
+                        <button onclick="toggleCombo('combo-441')" class="w-full p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-lg font-mono text-sm">4.41</span>
+                                <span class="font-medium">Шығармашылық</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform" id="icon-441"></i>
+                        </button>
+                        <div id="combo-441" class="hidden px-4 pb-4">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B091</span>
+                                    <span class="text-slate-300">Сән дизайны</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B092</span>
+                                    <span class="text-slate-300">Графика дизайны</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B093</span>
+                                    <span class="text-slate-300">Кескіндеме</span>
+                                </div>
+                                <button class="w-full mt-3 bg-slate-700 hover:bg-slate-600 py-2 rounded-xl text-sm">
+                                    +8 мамандық көру
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Combination 4.12 -->
+                    <div class="bg-[#1e2937] rounded-2xl overflow-hidden">
+                        <button onclick="toggleCombo('combo-412')" class="w-full p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-lg font-mono text-sm">4.12</span>
+                                <span class="font-medium">Химия — Биология</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform" id="icon-412"></i>
+                        </button>
+                        <div id="combo-412" class="hidden px-4 pb-4">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B060</span>
+                                    <span class="text-slate-300">Медицина</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B061</span>
+                                    <span class="text-slate-300">Стоматология</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B062</span>
+                                    <span class="text-slate-300">Фармация</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B063</span>
+                                    <span class="text-slate-300">Ветеринария</span>
+                                </div>
+                                <button class="w-full mt-3 bg-slate-700 hover:bg-slate-600 py-2 rounded-xl text-sm">
+                                    +15 мамандық көру
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Combination 4.13 -->
+                    <div class="bg-[#1e2937] rounded-2xl overflow-hidden">
+                        <button onclick="toggleCombo('combo-413')" class="w-full p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-lg font-mono text-sm">4.13</span>
+                                <span class="font-medium">География — Тарих</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform" id="icon-413"></i>
+                        </button>
+                        <div id="combo-413" class="hidden px-4 pb-4">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B036</span>
+                                    <span class="text-slate-300">География мұғалімі</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B037</span>
+                                    <span class="text-slate-300">Тарих мұғалімі</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-t border-slate-700">
+                                    <span class="text-slate-400">B038</span>
+                                    <span class="text-slate-300">Туризм</span>
+                                </div>
+                                <button class="w-full mt-3 bg-slate-700 hover:bg-slate-600 py-2 rounded-xl text-sm">
+                                    +9 мамандық көру
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 4. PRACTICE PAGE ====================== -->
+        <div id="practice-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <h1 class="text-2xl font-bold mb-6">Практика</h1>
+                
+                <!-- Coming Soon Card -->
+                <div class="bg-gradient-to-br from-orange-900/30 to-amber-900/30 rounded-2xl p-8 text-center border border-orange-500/30 mb-6">
+                    <div class="w-20 h-20 mx-auto bg-orange-500/20 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-rocket text-4xl text-orange-400"></i>
+                    </div>
+                    <h2 class="text-xl font-bold mb-2">Жақында...</h2>
+                    <p class="text-slate-400">Практика бөлімі әзірленуде. Бұл жерде сіз пәндер бойынша жаттығуларды орындай аласыз.</p>
+                </div>
+
+                <!-- Subjects Grid -->
+                <h3 class="font-semibold mb-4">Пәндерді таңдау</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-square-root-alt text-2xl text-orange-400 mb-2"></i>
+                        <p class="font-medium">Математика</p>
+                        <p class="text-xs text-slate-500">0/50 тест</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-atom text-2xl text-blue-400 mb-2"></i>
+                        <p class="font-medium">Физика</p>
+                        <p class="text-xs text-slate-500">0/40 тест</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-flask text-2xl text-emerald-400 mb-2"></i>
+                        <p class="font-medium">Химия</p>
+                        <p class="text-xs text-slate-500">0/40 тест</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-dna text-2xl text-rose-400 mb-2"></i>
+                        <p class="font-medium">Биология</p>
+                        <p class="text-xs text-slate-500">0/40 тест</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-landmark text-2xl text-amber-400 mb-2"></i>
+                        <p class="font-medium">Қазақстан тарихы</p>
+                        <p class="text-xs text-slate-500">0/40 тест</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-4 hover:bg-slate-700 transition-colors cursor-pointer">
+                        <i class="fas fa-language text-2xl text-purple-400 mb-2"></i>
+                        <p class="font-medium">Қазақ тілі</p>
+                        <p class="text-xs text-slate-500">0/30 тест</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 5. TEST PAGE ====================== -->
+        <div id="test-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <h1 class="text-2xl font-bold mb-6">Тест</h1>
+                
+                <!-- Test Card -->
+                <div class="bg-[#1e2937] rounded-2xl p-6">
+                    <!-- Timer & Progress -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-2 bg-slate-700 px-4 py-2 rounded-xl">
+                            <i class="fas fa-clock text-orange-400"></i>
+                            <span class="font-mono font-bold" id="test-timer">03:50:00</span>
+                        </div>
+                        <span class="text-slate-400">1 / 120</span>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-700 rounded-full h-2 mb-6">
+                        <div class="bg-orange-500 h-2 rounded-full" style="width: 0.8%"></div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="mb-6">
+                        <span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-lg text-sm mb-3 inline-block">Математика</span>
+                        <h3 class="text-lg font-medium leading-relaxed">
+                            Екі санның қосындысы 25-ке тең. Бір сан екінші саннан 5-ке артық. Осы сандарды табыңыз.
+                        </h3>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="space-y-3 mb-6">
+                        <button class="w-full bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-left transition-colors flex items-center gap-3">
+                            <span class="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center font-medium">A</span>
+                            <span>10 және 15</span>
+                        </button>
+                        <button class="w-full bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-left transition-colors flex items-center gap-3">
+                            <span class="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center font-medium">B</span>
+                            <span>8 және 13</span>
+                        </button>
+                        <button class="w-full bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-left transition-colors flex items-center gap-3">
+                            <span class="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center font-medium">C</span>
+                            <span>10 және 10</span>
+                        </button>
+                        <button class="w-full bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-left transition-colors flex items-center gap-3">
+                            <span class="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center font-medium">D</span>
+                            <span>12 және 17</span>
+                        </button>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="flex items-center justify-between">
+                        <button class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-xl transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>Алдыңғы
+                        </button>
+                        <button class="bg-orange-500 hover:bg-orange-600 text-black px-6 py-3 rounded-xl font-medium transition-colors">
+                            Келесі<i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-3 gap-3 mt-6">
+                    <div class="bg-[#1e2937] rounded-xl p-3 text-center">
+                        <p class="text-2xl font-bold text-emerald-400">45</p>
+                        <p class="text-xs text-slate-500">Дұрыс</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-3 text-center">
+                        <p class="text-2xl font-bold text-red-400">12</p>
+                        <p class="text-xs text-slate-500">Қате</p>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-xl p-3 text-center">
+                        <p class="text-2xl font-bold text-slate-400">63</p>
+                        <p class="text-xs text-slate-500">Қалды</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 6. CURATOR PAGE (заглушка) ====================== -->
+        <div id="curator-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <h1 class="text-2xl font-bold mb-6">Куратор</h1>
+                
+                <div class="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 rounded-2xl p-8 text-center border border-blue-500/30">
+                    <div class="w-20 h-20 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-4xl text-blue-400"></i>
+                    </div>
+                    <h2 class="text-xl font-bold mb-2">Куратормен байланыс</h2>
+                    <p class="text-slate-400 mb-4">Сіздің кураторыңыз жақын арада тағайындалады</p>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium">
+                        Хабарласу
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== 7. PROFILE PAGE ====================== -->
+        <div id="profile-page" class="page hidden min-h-screen pb-24">
+            <div class="max-w-2xl mx-auto p-5">
+                <!-- Profile Header -->
+                <div class="text-center mb-8">
+                    <div class="w-28 h-28 mx-auto bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-6xl shadow-lg mb-4">
+                        👤
+                    </div>
+                    <h2 id="profile-name" class="text-2xl font-bold">Оқушы</h2>
+                    <p id="profile-email" class="text-slate-400"></p>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-[#1e2937] rounded-2xl p-4 text-center">
+                        <div class="text-2xl font-bold text-orange-400">12</div>
+                        <div class="text-xs text-slate-400 mt-1">Сабақ оқылды</div>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-2xl p-4 text-center">
+                        <div class="text-2xl font-bold text-cyan-400">245</div>
+                        <div class="text-xs text-slate-400 mt-1">Ұпай</div>
+                    </div>
+                    <div class="bg-[#1e2937] rounded-2xl p-4 text-center">
+                        <div class="text-2xl font-bold text-emerald-400">7</div>
+                        <div class="text-xs text-slate-400 mt-1">Күн стрик</div>
+                    </div>
+                </div>
+
+                <!-- Menu Items -->
+                <div class="space-y-3">
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-user-edit text-xl text-orange-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Жеке ақпаратты өзгерту</div>
+                            <div class="text-sm text-slate-400">Аты-жөні, телефон</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-slate-500"></i>
+                    </div>
+
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-trophy text-xl text-amber-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Менің жетістіктерім</div>
+                            <div class="text-sm text-slate-400">Бейджіктер мен сертификаттар</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-slate-500"></i>
+                    </div>
+
+                    <div class="bg-[#1e2937] rounded-2xl p-5 flex items-center gap-4">
+                        <i class="fas fa-cog text-xl text-slate-400"></i>
+                        <div class="flex-1">
+                            <div class="font-medium">Параметрлер</div>
+                            <div class="text-sm text-slate-400">Хабарландырулар, тіл</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-slate-500"></i>
+                    </div>
+
+                    <button onclick="logoutUser()" 
+                            class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-medium mt-6">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Аккаунттан шығу
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================== BOTTOM NAVIGATION ====================== -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-[#1e2937] border-t border-slate-700 py-2 z-50">
+            <div class="max-w-2xl mx-auto grid grid-cols-5 text-center">
+                <a onclick="showPage('dashboard')" id="nav-dashboard" class="nav-item flex flex-col items-center text-slate-400 hover:text-white cursor-pointer py-1">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs mt-1">Басты</span>
+                </a>
+                <a onclick="showPage('practice')" id="nav-practice" class="nav-item flex flex-col items-center text-slate-400 hover:text-white cursor-pointer py-1">
+                    <i class="fas fa-book text-xl"></i>
+                    <span class="text-xs mt-1">Практика</span>
+                </a>
+                <a onclick="showPage('test')" id="nav-test" class="nav-item flex flex-col items-center text-slate-400 hover:text-white cursor-pointer py-1">
+                    <i class="fas fa-tasks text-xl"></i>
+                    <span class="text-xs mt-1">Тест</span>
+                </a>
+                <a onclick="showPage('curator')" id="nav-curator" class="nav-item flex flex-col items-center text-slate-400 hover:text-white cursor-pointer py-1">
+                    <i class="fas fa-users text-xl"></i>
+                    <span class="text-xs mt-1">Куратор</span>
+                </a>
+                <a onclick="showPage('profile')" id="nav-profile" class="nav-item flex flex-col items-center text-slate-400 hover:text-white cursor-pointer py-1">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-xs mt-1">Профиль</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAldxIiXS-M9OWwbUpCVfNjS1tcCgFK-lU",
+            authDomain: "bilimai-317e8.firebaseapp.com",
+            projectId: "bilimai-317e8",
+            storageBucket: "bilimai-317e8.firebasestorage.app",
+            messagingSenderId: "809788611994",
+            appId: "1:809788611994:web:2bbd71059bd23f382e6e23",
+            measurementId: "G-CW6GFVRKV0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const authPage = document.getElementById('auth-page');
+        const mainApp = document.getElementById('main-app');
+
+        const userEmailDash = document.getElementById('user-email-dash');
+        const profileEmail = document.getElementById('profile-email');
+        const profileName = document.getElementById('profile-name');
+        const userName = document.getElementById('user-name');
+
+        const authError = document.getElementById('auth-error');
+
+        // Auth ���������
+        document.getElementById('register-btn').addEventListener('click', async () => {
+            const email = document.getElementById('register-email').value.trim();
+            const pass = document.getElementById('register-password').value.trim();
+            authError.textContent = '';
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            } catch (e) { authError.textContent = e.message; }
+        });
+
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+            authError.textContent = '';
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) { authError.textContent = e.message; }
+        });
+
+        // Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authPage.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                userEmailDash.textContent = user.email;
+                profileEmail.textContent = user.email;
+                const name = user.email.split('@')[0];
+                profileName.textContent = name;
+                userName.textContent = name;
+                showPage('dashboard');
+            } else {
+                authPage.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+            }
+        });
+
+        window.logoutUser = async () => {
+            await signOut(auth);
+        };
+
+        window.toggleCombo = function(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id.split('-')[1]);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        };
+    </script>
+
+    <script>
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            const selectedPage = document.getElementById(pageName + '-page');
+            if (selectedPage) {
+                selectedPage.classList.remove('hidden');
+            }
+            
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('nav-active');
+                nav.classList.remove('text-orange-400');
+                nav.classList.add('text-slate-400');
+            });
+            
+            const activeNav = document.getElementById('nav-' + pageName);
+            if (activeNav) {
+                activeNav.classList.add('nav-active');
+                activeNav.classList.remove('text-slate-400');
+                activeNav.classList.add('text-orange-400');
+            }
+        }
+
+        window.showPage = showPage;
+    </script>
+</body>
+</html>
