@@ -2,7 +2,7 @@ import { db } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Сервер прокси — ключ хранится на сервере, не в клиенте
-const SERVER_URL = 'http://localhost:3001';
+const SERVER_URL = 'https://bilimai-21lr.onrender.com/api/chat';
 
 export async function askCurator(
   messages: { role: 'user' | 'assistant'; text: string }[],
